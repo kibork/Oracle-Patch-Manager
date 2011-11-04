@@ -33,10 +33,10 @@ public class JarClassPathElementTest {
     @Test
     public void testSeach() {
         ClassPath classPath = new ClassPath();
-        final Collection<TargetElement> targets = classPath.findTargets("java/io", Pattern.compile("FileFilter\\.class"));
+        final Collection<TargetElement> targets = classPath.findTargets("org/junit", Pattern.compile("Assert\\.class"));
         Assert.assertEquals(1, targets.size());
         for (TargetElement element : targets) {
-            Assert.assertEquals("FileFilter.class", element.getName());
+            Assert.assertEquals("Assert.class", element.getName());
         }
     }
 
@@ -44,13 +44,13 @@ public class JarClassPathElementTest {
     public void testOpenStream() throws IOException {
         ClassPath classPath = new ClassPath();
         final Collection<TargetElement> testtargets = classPath.findTargets("", Pattern.compile("testcontent\\.jar"));
-        Assert.assertEquals(1, testtargets.size());
+        Assert.assertEquals("Test Jar file not found", 1, testtargets.size());
         final TargetElement jartarget = testtargets.iterator().next();
 
         JarClassPathElement jarClassPathElement = new JarClassPathElement(jartarget.getInternalName());
 
         final Collection<TargetElement> targets = jarClassPathElement.scanFor("sun/nio/cs", Pattern.compile(".+\\.class"));
-        Assert.assertEquals(1, targets.size());
+        Assert.assertEquals("Test target not found", 1, targets.size());
         final TargetElement element = targets.iterator().next();
         Assert.assertEquals("SingleByte.class", element.getName());
         InputStream resourceStream = element.getInputStream();
